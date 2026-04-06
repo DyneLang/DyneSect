@@ -1,0 +1,7 @@
+# Clang-format configuration for DyneSect
+# See CONTRIBUTE.md for code style guidelines
+
+BasedOnStyle: LLVM
+IndentWidth: 4
+UseTab: Never
+Standard: c++20
