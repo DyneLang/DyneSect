@@ -21,6 +21,17 @@ FetchContent_Declare(
 set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+# --- Path definitions ---------------------------------------------------
+# Propagates all DSECT_* path options to a target as preprocessor string macros.
+function(dsect_apply_options target)
+    target_compile_definitions(${target} PRIVATE
+        DSECT_TOOLS_PATH="${DSECT_TOOLS_PATH}"
+        DSECT_DEBUG_IMAGE_PATH="${DSECT_DEBUG_IMAGE_PATH}"
+        DSECT_DDK_INCLUDE_PATH="${DSECT_DDK_INCLUDE_PATH}"
+        DSECT_WORK_PATH="${DSECT_WORK_PATH}"
+    )
+endfunction()
+
 # --- Tools --------------------------------------------------------------
 add_subdirectory(src/dynesect)
 add_subdirectory(src/dynediff)

@@ -1,6 +1,9 @@
 # CMake build directory
 build/
 
+# dynesect output (set by DSECT_WORK_PATH)
+work/
+
 # Prerequisites
 *.d
 

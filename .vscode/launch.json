@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "dynesect",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/VSCode/src/dynesect/dynesect",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "MIMode": "lldb"
+        },
+        {
+            "name": "dynediff",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/VSCode/src/dynediff/dynediff",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "MIMode": "lldb"
+        },
+        {
+            "name": "dynepatch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/VSCode/src/dynepatch/dynepatch",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "MIMode": "lldb"
+        }
+    ]
+}
