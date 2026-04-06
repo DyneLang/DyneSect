@@ -37,6 +37,9 @@ add_subdirectory(src/dynesect)
 add_subdirectory(src/dynediff)
 add_subdirectory(src/dynepatch)
 
+# --- ROM build pipeline (Norcroft toolchain) ----------------------------
+include(cmake/rom_build.cmake)
+
 # --- Tests --------------------------------------------------------------
 enable_testing()
 add_subdirectory(tests)
