@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
 project(DyneSect LANGUAGES CXX)
 
+# --- IntelliSense support -----------------------------------------------
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # --- Language standard --------------------------------------------------
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,6 +23,13 @@ FetchContent_Declare(
 # Keep gtest's install targets out of our install
 set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG        v3.11.3
+)
+FetchContent_MakeAvailable(nlohmann_json)
 
 # --- Path definitions ---------------------------------------------------
 # Propagates all DSECT_* path options to a target as preprocessor string macros.

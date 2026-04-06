@@ -1,0 +1,12 @@
+{
+    "chunks": [
+        { "name": "rom_block_0", "source": "rom_block_0.s" },
+        { "name": "rom_block_1", "source": "rom_block_1.s" },
+        { "name": "rom_block_2", "source": "rom_block_2.s" },
+        { "name": "rom_block_3", "source": "rom_block_3.s" },
+        { "name": "rom_block_4", "source": "rom_block_4.s" },
+        { "name": "rom_block_5", "source": "rom_block_5.s" },
+        { "name": "rom_block_6", "source": "rom_block_6.s" },
+        { "name": "rom_block_7", "source": "rom_block_7.s" }
+    ]
+}

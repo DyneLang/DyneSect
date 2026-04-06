@@ -1,9 +1,12 @@
 
+#include <nlohmann/json.hpp>
 
 #include <iostream>
 #include <string>
 #include <string_view>
 #include <stdexcept>
+
+using json = nlohmann::json;
 
 const std::string gAIFFilePath = DSECT_DEBUG_IMAGE_PATH "/Senior CirrusNoDebug image";
 const std::string gRExFilePath = DSECT_DEBUG_IMAGE_PATH "/Senior CirrusNoDebug high";

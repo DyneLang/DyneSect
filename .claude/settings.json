@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmake --build /Users/matt/dev/DyneSect.git/build --target dynesect)"
+    ]
+  }
+}
