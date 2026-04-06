@@ -1,0 +1,11 @@
+
+time ARM6asm rom_block_0.s -o rom_block_0.s.o
+time ARM6asm rom_block_1.s -o rom_block_1.s.o
+time ARM6asm rom_block_2.s -o rom_block_2.s.o
+time ARM6asm rom_block_3.s -o rom_block_3.s.o
+time ARM6asm rom_block_4.s -o rom_block_4.s.o
+time ARM6asm rom_block_5.s -o rom_block_5.s.o
+time ARM6asm rom_block_6.s -o rom_block_6.s.o
+time ARM6asm rom_block_7.s -o rom_block_7.s.o
+
+time ARMLink rom_block_0.s.o rom_block_1.s.o rom_block_2.s.o rom_block_3.s.o rom_block_4.s.o rom_block_5.s.o rom_block_6.s.o rom_block_7.s.o -map -bin -o new_rom.bin
