@@ -1,4 +1,9 @@
 
+#include "main.h"
+
+#include "AIFReader.h"
+#include "RExReader.h"
+
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -17,7 +22,8 @@ const std::string gRExFilePath = DSECT_DEBUG_IMAGE_PATH "/Senior CirrusNoDebug h
 const std::string gWorkPath = DSECT_WORK_PATH "/";
 const std::string gROMFilePath = DSECT_WORK_PATH "/ROM.bin";
 
-uint8_t ROM[8*1024*1024];
+Memory gMem;
+LabelMap gLabelMap;
 
 // dynesect: reads the Newton AIF and REx images, analyses the ROM content,
 // and writes disassembled source files for reassembly with the Norcroft toolchain.
@@ -38,20 +44,14 @@ echo "ARMLink -via link.via -bin -o rom.bin"
 
 void extract_ROM()
 {
-    // Read the core ROM from the AIF file.
-    FILE* aif = fopen(gAIFFilePath.c_str(), "rb");
-    if (!aif)
-        throw std::runtime_error(std::string("Can't read AIF image file: ") + gAIFFilePath + " - " + strerror(errno));
-    fseek(aif, 0x00000080, SEEK_SET);
-    fread(ROM, 1, 0x0071fc4c, aif);
-    fclose(aif);
+    gMem.add_allocated_block(0x00000000, 0x00800000);
 
-    // Read ROM Extension from the REx file.
-    FILE* rex = fopen(gRExFilePath.c_str(), "rb");
-    if (!rex)
-        throw std::runtime_error(std::string("Can't read REx image file: ") + gRExFilePath + " - " + strerror(errno));
-    fread(ROM + 0x0071fc4c, 1, 0x000ce3fc, rex);
-    fclose(rex);
+    // Read the core ROM from the AIF file.
+    uint32_t core_end = read_aif(gAIFFilePath, gMem, gLabelMap);
+
+    // Read the ROM Extension.
+    read_rex(gRExFilePath, core_end, gMem, gLabelMap);
+    // ROM: 0..0071a95c End of RW: 0071fc4c
 }
 
 
@@ -61,7 +61,7 @@ void write_ROM_binary()
     FILE* rom = fopen(gROMFilePath.c_str(), "wb");
     if (!rom)
         throw std::runtime_error(std::string("Can't write ROM file: ") + gRExFilePath + " - " + strerror(errno));
-    fwrite(ROM, 1, 8*1024*1024, rom);
+    fwrite(gMem.block_at(0x00000000)->data(), 1, 8*1024*1024, rom);
     fclose(rom);
 }
 
@@ -113,8 +113,7 @@ void write_asm_chunk(const std::string& name, int start, int end)
     // Linking of 8 1MB files takes 1.s
 
     for (int i=start; i<end; i+=4) {
-        uint8_t* src = ROM + i;
-        uint32_t word = (src[0]<<24) | (src[1]<<16) | (src[2]<<8) | (src[3]);
+        uint32_t word = gMem.read_word(i);
         out << "        DCD     0x" << std::hex << std::setw(8) << std::setfill('0') << word << "\n";
     }
 

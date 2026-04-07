@@ -49,6 +49,8 @@ public:
     uint16_t read_short(uint32_t address) const;
     uint32_t read_word (uint32_t address) const;
 
+    uint8_t* data();
+
 private:
     uint32_t                          m_base;
     uint32_t                          m_size;

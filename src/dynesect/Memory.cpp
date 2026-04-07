@@ -86,6 +86,11 @@ uint32_t MemoryBlock::read_word(uint32_t address) const
          | static_cast<uint32_t>(byte_at(address + 3));
 }
 
+uint8_t* MemoryBlock::data()
+{
+    return m_data ? m_data->data() : nullptr;
+}
+
 // ============================================================================
 // Memory
 // ============================================================================
