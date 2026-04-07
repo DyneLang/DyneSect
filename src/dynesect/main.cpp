@@ -1,13 +1,15 @@
 
-#include <nlohmann/json.hpp>
-
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <string_view>
 #include <stdexcept>
 
+#include <nlohmann/json.hpp>
+
 using json = nlohmann::json;
 
+const std::string gConfigPath = DSECT_CONFIG_PATH;
 const std::string gAIFFilePath = DSECT_DEBUG_IMAGE_PATH "/Senior CirrusNoDebug image";
 const std::string gRExFilePath = DSECT_DEBUG_IMAGE_PATH "/Senior CirrusNoDebug high";
 const std::string gWorkPath = DSECT_WORK_PATH "/";
@@ -19,6 +21,7 @@ uint8_t ROM[8*1024*1024];
 // dynesect: reads the Newton AIF and REx images, analyses the ROM content,
 // and writes disassembled source files for reassembly with the Norcroft toolchain.
 
+// -DDSECT_CONFIG_PATH=${CMAKE_SOURCE_DIR}
 // -DDSECT_TOOLS_PATH=/usr/local/bin
 // -DDSECT_DEBUG_IMAGE_PATH=/Users/matt/dev/Newton/ROMs/MP2x00 US
 // -DDSECT_DDK_INCLUDE_PATH=/Users/matt/dev/Newton/NewtonDev/NewtonDev.ux/Cpp/NCT_Projects/DDKIncludes
@@ -165,7 +168,24 @@ void write_rom_block(int n)
 
 void write_rom_blocks()
 {
-    for (int i=0; i<8; i++) {
+    std::ifstream f(gConfigPath + "/rom_chunks.json");
+    json data = json::parse(f);
+    if (data.is_null())
+        throw std::runtime_error(std::string("Can't read " + gConfigPath + "/rom_chunks.json"));
+    json chunks = data["chunks"];
+    if (!chunks.is_array())
+        throw std::runtime_error(std::string("ROM Chunks.json: expected \"chunks\" array"));
+
+    int n = chunks.size();
+    for (int i=0; i<n; i++) {
+        json chunk = chunks[i];
+        json name = chunk["name"];
+        if (!name.is_string())
+            throw std::runtime_error(std::string("ROM Chunks.json: expected \"name\" in chunk" + std::to_string(i)));
+        // Name ending in '/' set a new subdirectory
+        // Name ending in '.s' is an ARM32 assembler file
+        // Name ending in '.c' is a C file
+        // Name ending in '.cpp' is C++ file
         write_rom_block(i);
     }
 }

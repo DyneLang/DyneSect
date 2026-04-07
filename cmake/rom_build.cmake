@@ -41,17 +41,28 @@ math(EXPR _last_index "${_chunk_count} - 1")
 set(ROM_OBJECTS "")
 
 foreach(i RANGE ${_last_index})
-    string(JSON _source GET "${_json}" "chunks" ${i} "source")
+    string(JSON _name GET "${_json}" "chunks" ${i} "name")
 
-    set(_src "${DSECT_WORK_PATH}/${_source}")
-    set(_obj "${DSECT_WORK_PATH}/${_source}.o")
+    if(${_name} MATCHES ".*/")
+        # set a new subdirectory for all following files
+        # message(FATAL_ERROR, "Dir found!")
+    elseif(${_source} MATCHES ".*\.s")
+        # ARM32 assembler file
+    elseif(${_source} MATCHES ".*\.cpp")
+        # C++ file (patch __arm command)
+    elseif(${_source} MATCHES ".*\.c")
+        # C file (patch __arm command)
+    endif()
+
+    set(_src "${DSECT_WORK_PATH}/${_name}")
+    set(_obj "${DSECT_WORK_PATH}/${_name}.o")
 
     # Each block is an independent command so Ninja/Make can parallelise them.
     add_custom_command(
         OUTPUT  "${_obj}"
         COMMAND "${ARM6ASM}" "${_src}" -o "${_obj}"
         DEPENDS "${_src}"
-        COMMENT "ARM6asm ${_source}"
+        COMMENT "ARM6asm ${_name}"
         VERBATIM
     )
 

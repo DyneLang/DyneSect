@@ -35,6 +35,7 @@ FetchContent_MakeAvailable(nlohmann_json)
 # Propagates all DSECT_* path options to a target as preprocessor string macros.
 function(dsect_apply_options target)
     target_compile_definitions(${target} PRIVATE
+        DSECT_CONFIG_PATH="${CMAKE_SOURCE_DIR}"
         DSECT_TOOLS_PATH="${DSECT_TOOLS_PATH}"
         DSECT_DEBUG_IMAGE_PATH="${DSECT_DEBUG_IMAGE_PATH}"
         DSECT_DDK_INCLUDE_PATH="${DSECT_DDK_INCLUDE_PATH}"
