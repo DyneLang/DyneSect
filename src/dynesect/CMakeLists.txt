@@ -1,6 +1,7 @@
 add_executable(dynesect
     main.cpp
     Label.cpp
+    Memory.cpp
 )
 
 target_compile_features(dynesect PRIVATE cxx_std_20)
