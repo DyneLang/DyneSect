@@ -11,17 +11,22 @@ class Type;
 // ----------------------------------------------------------------------------
 // LabelFlags
 //
-// Lower 8 bits mirror the AIF symbol table flags. Upper bits are ours.
+// Bits 0–3 describe the symbol's segment, derived from the AIF flag byte.
+// The AIF flag byte encodes: bit 0 = Global (always set for exported symbols);
+// bits 1–2 = segment type as a 2-bit field (see InRO/InRW/InZI below).
+//
+// Bits 8–11 record where the label came from.
 // ----------------------------------------------------------------------------
 enum class LabelFlags : uint32_t
 {
     None        = 0,
 
-    // AIF symbol table flags
-    Global      = 1 << 0,   // Exported / globally visible
-    Weak        = 1 << 1,   // Weak definition (may be overridden)
-    Thumb       = 1 << 2,   // Thumb code entry point (vs ARM)
-    DataObject  = 1 << 3,   // Label refers to a data object, not code
+    // Segment membership -- mutually exclusive, derived from AIF bits 1-2.
+    // Absolute linker symbols (AIF type 00) carry none of these flags.
+    Global      = 1 << 0,   // Exported / globally visible (AIF bit 0, always set)
+    InRO        = 1 << 1,   // Read-Only segment: ROM code and constants (AIF type 01)
+    InRW        = 1 << 2,   // Read-Write segment: initialized globals (AIF type 10)
+    InZI        = 1 << 3,   // Zero-Init segment: BSS / zeroed at boot (AIF type 11)
 
     // Source of the label
     FromAIF     = 1 << 8,   // Read from the AIF symbol table
