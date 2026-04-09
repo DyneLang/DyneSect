@@ -43,16 +43,14 @@ echo "ARMLink -via link.via -bin -o rom.bin"
 ./bin/ARMLink -via link.via -map -bin -o rom.bin
 */
 
-void extract_ROM()
+/**
+ * Load the AIF and REx debugger images and extract the labels in the AIF.
+ */
+void load_debug_images()
 {
     gMem.add_allocated_block(0x00000000, 0x00800000);
-
-    // Read the core ROM from the AIF file.
     uint32_t core_end = read_aif(gAIFFilePath, gMem, gLabelMap);
-
-    // Read the ROM Extension.
     read_rex(gRExFilePath, core_end, gMem, gLabelMap);
-    // ROM: 0..0071a95c End of RW: 0071fc4c
 }
 
 
@@ -90,7 +88,7 @@ void write_file_if_changed(const std::string& path, const std::string& content)
 
 
 
-void write_rom_blocks()
+void write_ROM_blocks()
 {
     std::ifstream f(gConfigPath + "/rom_chunks.json");
     json data = json::parse(f);
@@ -134,9 +132,9 @@ int main(int argc, char *argv[])
 {
     std::cout << "dynesect: Newton ROM dissection tool\n";
 
-    extract_ROM();
+    load_debug_images();
     write_ROM_binary();
-    write_rom_blocks();
+    write_ROM_blocks();
 
     return 0;
 }

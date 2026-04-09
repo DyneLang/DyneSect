@@ -153,7 +153,7 @@ uint32_t read_aif(const std::string& path, Memory& memory, LabelMap& labels)
             case 0x00:
                 // Absolute linker symbol: size, limit, or constant value.
                 // Not a ROM address -- print for inspection until confirmed.
-                std::cout << std::format("abs-sym  0x{:02x}  0x{:08x}  {}\n", flags, value, name);
+                //std::cout << std::format("abs-sym  0x{:02x}  0x{:08x}  {}\n", flags, value, name);
                 continue;
             case 0x01: lflags = lflags | LabelFlags::InRO; break;   // ROM code
             case 0x02: lflags = lflags | LabelFlags::InRW; break;   // initialized globals
